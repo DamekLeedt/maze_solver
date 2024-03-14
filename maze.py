@@ -1,6 +1,17 @@
 from tkinter import Tk, BOTH, Canvas
 import random
 from time import sleep
+"""
+TODO?:
+Add other solving algorithms, like breadth-first search or A*
+Make the visuals prettier, change the colors, etc
+Mess with the animation settings to make it faster/slower. Maybe make backtracking slow and blazing new paths faster?
+Add configurations in the app itself using Tkinter buttons and inputs to allow users to change maze size, speed, etc
+Make much larger mazes to solve
+Make it a game where the user chooses directions
+If you made it a game, allow the user to race an algorithm
+Make it 3 dimensional
+Time the various algorithms and see which ones are the fastest"""
 
 class Point:
     def __init__(self, x, y):
@@ -159,14 +170,6 @@ class Maze:
         }
 
     def _break_walls_r(self, i, j):
-        """Mark the current cell as visited
-        In an infinite loop:
-            Create a new empty list to hold the i and j values you will need to visit
-            Check the cells that are directly adjacent to the current cell. Keep track of any that have not been visited as "possible directions" to move to
-            If there are zero directions you can go from the current cell, then draw the current cell and return to break out of the loop
-            Otherwise, pick a random direction.
-            Knock down the walls between the current cell and the chosen cell.
-            Move to the chosen cell by recursively calling _break_walls_r"""
         current_cell:Cell = self._cells[i][j]
         while True:
             to_visit = []
@@ -214,19 +217,6 @@ class Maze:
         return self._solve_r(0, 0)
     
     def _solve_r(self, i, j):
-        """I wrote a depth-first first solution to the maze, feel free to do something different if you want. Here were my steps.
-
-        The _solve_r method returns True if the current cell is an end cell, OR if it leads to the end cell. It returns False if the current cell is a loser cell.
-
-        Call the _animate method.
-        Mark the current cell as visited
-        If you are at the "end" cell (the goal) then return True.
-        For each direction:
-            If there is a cell in that direction, there is no wall blocking you, and that cell hasn't been visited:
-                Draw a move between the current cell and that cell
-                Call _solve_r recursively to move to that cell. If that cell returns True, then just return True and don't worry about the other directions.
-                Otherwise, draw an "undo" move between the current cell and the next cell
-        If none of the directions worked out, return False."""
         self._animate()
         current_cell:Cell = self._cells[i][j]
         current_cell.visited = True
